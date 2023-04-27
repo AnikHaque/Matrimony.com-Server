@@ -70,6 +70,7 @@ async function run() {
       const result = await productsCollection.find(query).toArray();
       res.send(result);
     });
+     // GET API for agents
     app.get("/agent", async (req, res) => {
       const query = {};
       const result = await agentCollection.find(query).toArray();
