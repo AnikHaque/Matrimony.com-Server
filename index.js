@@ -76,41 +76,47 @@ async function run() {
       const result = await agentCollection.find(query).toArray();
       res.send(result);
     });
+     // GET API for lawyers
     app.get("/lawyer", async (req, res) => {
       const query = {};
       const result = await lawyerCollection.find(query).toArray();
       res.send(result);
     });
+     // GET API for products
     app.get("/item", async (req, res) => {
       const query = {};
       const result = await itemCollection.find(query).toArray();
       res.send(result);
     });
-    // to show the data id based
+
+    // GET API to show the Profile id based
     app.get("/products/:id/profile:id", async (req, res) => {
       const id = req.params.id;
       const query = { id: id };
-
       const result = await productsCollection.find(query).toArray();
       res.send(result);
     });
-    // post api for booking items
+
+    // POST API for booking items
     app.post("/bookeditems", async (req, res) => {
       const bookingitems = req.body;
       const result = await bookingsCollection.insertOne(bookingitems);
       res.send(result);
     });
-    // api for sellers posted product
+    // POST API for sellers posted product
     app.post("/addedproducts", async (req, res) => {
       const postedproduct = req.body;
       const result = await productsCollection.insertOne(postedproduct);
       res.send(result);
     });
+
+    // POST API for kazi 
     app.post("/kazi", async (req, res) => {
       const postedkazi = req.body;
       const result = await kaziCollection.insertOne(postedkazi);
       res.send(result);
     });
+     // POST API for agents
     app.post("/agent", async (req, res) => {
       const postedagent = req.body;
       const result = await agentCollection.insertOne(postedagent);
