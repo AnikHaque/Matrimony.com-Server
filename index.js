@@ -45,7 +45,6 @@ async function run() {
       const categoriesCollection = database.collection("productCategories");
       const usersCollection = database.collection("users");
       const productsCollection = database.collection("products");
-      const profileCollection = database.collection("profile");
       const bookingsCollection = database.collection("bookeditems");
       const postedProductsCollection = database.collection("sellersproducts");
       const  paymentsCollection = database.collection("payments");
@@ -91,7 +90,7 @@ async function run() {
     });
 
     // GET API to show the Profile id based
-    app.get("/products/:id/profile:id", async (req, res) => {
+    app.get("/products/:id", async (req, res) => {
       const id = req.params.id;
       const query = { id: id };
       const result = await productsCollection.find(query).toArray();
@@ -243,8 +242,6 @@ async function run() {
     res.send(result);
   });
   
-  
-
     // -------------All POST API's end----------------
 
     // -------------All DELETE API's Start----------------
@@ -295,23 +292,6 @@ async function run() {
 
     // ------------Payment API integrated--------------
 
-    // api to store payment info on db
-    app.post("/payments", async (req, res) => {
-      const payment = req.body;
-      const result = await paymentsCollection.insertOne(payment);
-      const id = payment.bookingId;
-      const filter = { _id: ObjectId(id) };
-      const updatedDoc = {
-        $set: {
-          paid: true,
-          trandactionId: payment.transactionId,
-        },
-      };
-      const updated = await bookingsCollection.updateOne(filter, updatedDoc);
-
-      res.send(result);
-    });
-
     // payment method implementaion
     app.post("/create-payment-intent", async (req, res) => {
       const booking = req.body;
@@ -326,11 +306,25 @@ async function run() {
       res.send({
         clientSecret: paymentIntent.client_secret,
       });
+    });
+     // api to store payment info on db
+     app.post("/payments", async (req, res) => {
+      const payment = req.body;
+      const result = await paymentsCollection.insertOne(payment);
+      const id = payment.bookingId;
+      const filter = { _id: ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          paid: true,
+          trandactionId: payment.transactionId,
+        },
+      };
+      const updated = await bookingsCollection.updateOne(filter, updatedDoc);
 
+      res.send(result);
     });
     } 
-    finally {
-      
+    finally {   
     }
   }
   run().catch(console.dir);
