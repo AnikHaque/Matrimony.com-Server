@@ -13,9 +13,11 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json()); 
 
+// mongodb uri connection 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lx750.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
+// jwt function 
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -30,21 +32,23 @@ function verifyToken(req, res, next) {
     next();
   });
 }
+
 async function run() {
     try {
       await client.connect();
+      // database & collections 
       const database = client.db("MarriageCenter");
       const kaziCollection = database.collection("kazi");
       const agentCollection = database.collection("agent");
       const lawyerCollection = database.collection("lawyer");
       const itemCollection = database.collection("item");
-         const categoriesCollection = database.collection("productCategories");
-         const usersCollection = database.collection("users");
-         const productsCollection = database.collection("products");
-         const profileCollection = database.collection("profile");
-         const bookingsCollection = database.collection("bookeditems");
-         const postedProductsCollection = database.collection("sellersproducts");
-         const  paymentsCollection = database.collection("payments");
+      const categoriesCollection = database.collection("productCategories");
+      const usersCollection = database.collection("users");
+      const productsCollection = database.collection("products");
+      const profileCollection = database.collection("profile");
+      const bookingsCollection = database.collection("bookeditems");
+      const postedProductsCollection = database.collection("sellersproducts");
+      const  paymentsCollection = database.collection("payments");
     
    
 
