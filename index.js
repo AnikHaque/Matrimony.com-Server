@@ -52,7 +52,7 @@ async function run() {
     
    
 
-// to show the category
+// GET API for categories
     app.get("/categories", async (req, res) => {
       const query = {};
       const result = await categoriesCollection.find(query).toArray();
