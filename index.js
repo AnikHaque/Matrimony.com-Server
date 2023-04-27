@@ -58,11 +58,13 @@ async function run() {
       const result = await categoriesCollection.find(query).toArray();
       res.send(result);
     });
+    // GET API for kazi
     app.get("/kazi", async (req, res) => {
       const query = {};
       const result = await kaziCollection.find(query).toArray();
       res.send(result);
     });
+     // GET API for profiles
     app.get("/products", async (req, res) => {
       const query = {};
       const result = await productsCollection.find(query).toArray();
