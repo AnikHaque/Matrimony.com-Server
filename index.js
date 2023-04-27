@@ -122,11 +122,13 @@ async function run() {
       const result = await agentCollection.insertOne(postedagent);
       res.send(result);
     });
+     // POST API for lawyer
     app.post("/lawyer", async (req, res) => {
       const postedlawyer = req.body;
       const result = await lawyerCollection.insertOne(postedlawyer);
       res.send(result);
     });
+     // POST API for products
     app.post("/item", async (req, res) => {
       const posteditem = req.body;
       const result = await itemCollection.insertOne(posteditem);
