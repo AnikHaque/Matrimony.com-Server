@@ -51,6 +51,7 @@ async function run() {
       const  paymentsCollection = database.collection("payments");
     
    
+// -------------All GET API's Start----------------
 
 // GET API for categories
     app.get("/categories", async (req, res) => {
@@ -96,6 +97,37 @@ async function run() {
       const result = await productsCollection.find(query).toArray();
       res.send(result);
     });
+    // GET API for productbrand 
+    app.get("/productbrandname", async (req, res) => {
+      const query = {};
+      const result = await categoriesCollection
+
+        .find(query)
+        .project({ name: 1 })
+        .toArray();
+      res.send(result);
+    });
+    
+    // GET API for the posted product by sellers
+    app.get("/addedproducts", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const result = await productsCollection.find(query).toArray();
+      res.send(result);
+    });
+   
+
+    // GET API for the booked item on my orders route on client side
+    app.get("/bookeditems",  async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const result = await bookingsCollection.find(query).toArray();
+      res.send(result);
+    });
+
+// -------------All GET API's End----------------
+
+// -------------All POST API's Start----------------
 
     // POST API for booking items
     app.post("/bookeditems", async (req, res) => {
@@ -134,34 +166,9 @@ async function run() {
       const result = await itemCollection.insertOne(posteditem);
       res.send(result);
     });
+    // -------------All POST API's end----------------
 
-    app.get("/productbrandname", async (req, res) => {
-      const query = {};
-      const result = await categoriesCollection
-
-        .find(query)
-        .project({ name: 1 })
-        .toArray();
-      res.send(result);
-    });
-    // api to get the posted product by sellers
-    app.get("/addedproducts", async (req, res) => {
-      const email = req.query.email;
-      const query = { email: email };
-      const result = await productsCollection.find(query).toArray();
-      res.send(result);
-    });
-   
-
-    // api to get the booked item on my orders route on client side
-    app.get("/bookeditems",  async (req, res) => {
-      const email = req.query.email;
-      const query = { email: email };
-      const result = await bookingsCollection.find(query).toArray();
-      res.send(result);
-    });
-
-
+    // -------------All DELETE API's Start----------------
     // api to delete a seller
     app.delete("/seller/:id", async (req, res) => {
       const id = req.params.id;
@@ -184,7 +191,9 @@ async function run() {
       const result = await productsCollection.deleteOne(filter);
       res.send(result);
     });
+// -------------All DELETE API's end----------------
 
+// -------------All UPDATE API's Start----------------
     // make  a seller verified
     app.put("/seller/verify/:id", async (req, res) => {
       const id = req.params.id;
@@ -202,7 +211,7 @@ async function run() {
       );
       res.send(result);
     });
-
+// -------------All UPDATE API's end----------------
     app.get("/bookings/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
