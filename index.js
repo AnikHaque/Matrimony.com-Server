@@ -1,13 +1,15 @@
 const express = require('express')
-const { MongoClient } = require('mongodb');
-const jwt = require('jsonwebtoken');
 const cors = require('cors');
-const ObjectId = require('mongodb').ObjectId;
+// const jwt = require('jsonwebtoken');
+const { MongoClient, ObjectId  } = require('mongodb');
 require('dotenv').config();
-const app = express()
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
-
+const app = express()
 const port = process.env.PORT || 5000;
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 
 // middleware 
 app.use(cors());
@@ -329,9 +331,7 @@ async function run() {
   }
   run().catch(console.dir);
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
