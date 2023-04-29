@@ -51,7 +51,7 @@ async function run() {
       const postedProductsCollection = database.collection("sellersproducts");
       const  paymentsCollection = database.collection("payments");
     
-   
+      
 // -------------All GET API's Start----------------
 
 // GET API for categories
