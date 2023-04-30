@@ -1,8 +1,9 @@
 const express = require('express')
 const cors = require('cors');
 // const jwt = require('jsonwebtoken');
-const { MongoClient, ObjectId  } = require('mongodb');
+const { MongoClient } = require('mongodb');
 require('dotenv').config();
+const ObjectId = require('mongodb').ObjectId;
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const app = express()
 const port = process.env.PORT || 5000;
@@ -63,15 +64,21 @@ async function run() {
     // GET API for kazi
     app.get("/kazi", async (req, res) => {
       const query = {};
-      const result = await kaziCollection.find(query).toArray();
+      const cursor = kaziCollection.find(query);
+      const result = await cursor.toArray();
+      // const count = await kaziCollection.estimatedDocumentCount();
       res.send(result);
     });
+
      // GET API for profiles
     app.get("/products", async (req, res) => {
       const query = {};
-      const result = await productsCollection.find(query).toArray();
+      const cursor = productsCollection.find(query)
+      const result = await cursor.toArray();
+    
       res.send(result);
     });
+
      // GET API for agents
     app.get("/agent", async (req, res) => {
       const query = {};
@@ -91,13 +98,23 @@ async function run() {
       res.send(result);
     });
 
+ 
     // GET API to show the Profile id based
     app.get("/products/:id", async (req, res) => {
       const id = req.params.id;
       const query = { id: id };
-      const result = await productsCollection.find(query).toArray();
+      const cursor = productsCollection.find(query)
+      const result = await cursor.toArray();
+     
       res.send(result);
     });
+    // GET API to show the Profile id based
+    app.get('/item/:id', async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id:ObjectId(id)};
+      const kazi = await itemCollection.findOne(query);
+      res.json(kazi);
+    })
     // GET API for productbrand 
     app.get("/productbrandname", async (req, res) => {
       const query = {};
