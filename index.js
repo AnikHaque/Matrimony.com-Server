@@ -45,6 +45,7 @@ async function run() {
       const agentCollection = database.collection("agent");
       const lawyerCollection = database.collection("lawyer");
       const itemCollection = database.collection("item");
+      const choicelistCollection = database.collection("choice");
       const categoriesCollection = database.collection("productCategories");
       const usersCollection = database.collection("users");
       const productsCollection = database.collection("products");
@@ -85,6 +86,11 @@ async function run() {
       const result = await agentCollection.find(query).toArray();
       res.send(result);
     });
+    app.get("/choice", async (req, res) => {
+      const query = {};
+      const result = await choicelistCollection.find(query).toArray();
+      res.send(result);
+    });
      // GET API for lawyers
     app.get("/lawyer", async (req, res) => {
       const query = {};
@@ -115,6 +121,13 @@ async function run() {
       const kazi = await itemCollection.findOne(query);
       res.json(kazi);
     })
+    app.get('/lawyer/:id', async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id:ObjectId(id)};
+      const lawyer = await lawyerCollection.findOne(query);
+      res.json(lawyer);
+    })
+
     // GET API for productbrand 
     app.get("/productbrandname", async (req, res) => {
       const query = {};
@@ -223,6 +236,11 @@ async function run() {
     app.post("/kazi", async (req, res) => {
       const postedkazi = req.body;
       const result = await kaziCollection.insertOne(postedkazi);
+      res.send(result);
+    });
+    app.post("/choice", async (req, res) => {
+      const choicelist = req.body;
+      const result = await choicelistCollection.insertOne(choicelist);
       res.send(result);
     });
      // POST API for agents
