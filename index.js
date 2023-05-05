@@ -299,10 +299,6 @@ async function run() {
 app.post("/payment/success", async (req, res) => {
   const { transactionId } = req.query;
 
-  // if(!transactionId){
-  //     return res.redirect(`${process.env.CLIENT_URL}/payment/fail`);
-  // }
-  
   const result = await bookshopCollection.updateOne(
     { transactionId },
     { $set: { paid: true, paidAt: new Date() } }
