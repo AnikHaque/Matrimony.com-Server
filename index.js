@@ -6,6 +6,9 @@ require('dotenv').config();
 const ObjectId = require('mongodb').ObjectId;
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const app = express()
+const SSLCommerzPayment = require('sslcommerz-lts')
+const store_id = process.env. STORE_ID
+const is_live = false
 const port = process.env.PORT || 5000;
 
 app.get('/', (req, res) => {
@@ -46,6 +49,7 @@ async function run() {
       const lawyerCollection = database.collection("lawyer");
       const itemCollection = database.collection("item");
       const choicelistCollection = database.collection("choice");
+      const bookshopCollection = database.collection("bookshop");
       const categoriesCollection = database.collection("productCategories");
       const usersCollection = database.collection("users");
       const productsCollection = database.collection("products");
@@ -237,6 +241,13 @@ async function run() {
       const result = await kaziCollection.insertOne(postedkazi);
       res.send(result);
     });
+
+    app.post("/bookshop", async (req, res) => {
+      const bookshop = req.body;
+      const result = await bookshopCollection.insertOne(bookshop);
+      res.send(result);
+    });
+
     app.post("/choice", async (req, res) => {
       const choicelist = req.body;
       const result = await choicelistCollection.insertOne(choicelist);
