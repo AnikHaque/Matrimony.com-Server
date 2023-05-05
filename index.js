@@ -305,7 +305,7 @@ app.post("/payment/success", async (req, res) => {
   );
 
   if(result.modifiedCount > 0){
-      res.redirect(`http://localhost:3000/payment/success?transactionId=${transactionId}`);
+      res.redirect(`https://marriage-website-a05d0.web.app/payment/success?transactionId=${transactionId}`);
   }
 });
 
