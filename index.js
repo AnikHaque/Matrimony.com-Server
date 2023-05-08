@@ -118,11 +118,19 @@ async function run() {
      
       res.send(result);
     });
-    // GET API to show the Profile id based
+
+    // GET API to show the item id based
     app.get('/item/:id', async(req,res)=>{
       const id = req.params.id;
       const query = {_id:ObjectId(id)};
       const kazi = await itemCollection.findOne(query);
+      res.json(kazi);
+    })
+    // GET API to show the kazi id based
+    app.get('/kazi/:id', async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id:ObjectId(id)};
+      const kazi = await kaziCollection.findOne(query);
       res.json(kazi);
     })
     app.get('/lawyer/:id', async(req,res)=>{
@@ -255,9 +263,9 @@ async function run() {
         total_amount: orderedService.price,
         currency: order.currency,
         tran_id:transactionId,
-        success_url: `https://matrimony-com-server-anikhaque.vercel.app/payment/success?transactionId=${transactionId}`,
-              fail_url: `https://matrimony-com-server-anikhaque.vercel.app/payment/fail?transactionId=${transactionId}`,
-              cancel_url: `https://matrimony-com-server-anikhaque.vercel.app/payment/cancel`,
+        success_url: `http://localhost:5000/payment/success?transactionId=${transactionId}`,
+              fail_url: `http://localhost:5000/payment/fail?transactionId=${transactionId}`,
+              cancel_url: `http://localhost:5000/payment/cancel`,
         ipn_url: 'http://localhost:3030/ipn',
         shipping_method: 'Courier',
         product_name: 'Computer.',
@@ -305,7 +313,7 @@ app.post("/payment/success", async (req, res) => {
   );
 
   if(result.modifiedCount > 0){
-      res.redirect(`https://marriage-website-a05d0.web.app/payment/success?transactionId=${transactionId}`);
+      res.redirect(`http://localhost:3000/payment/success?transactionId=${transactionId}`);
   }
 });
 
