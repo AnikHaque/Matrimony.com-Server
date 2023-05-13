@@ -49,11 +49,13 @@ async function run() {
       const agentCollection = database.collection("agent");
       const lawyerCollection = database.collection("lawyer");
       const itemCollection = database.collection("item");
+      const vodeosCollection = database.collection("vodeos");
       const choicelistCollection = database.collection("choice");
       const bookshopCollection = database.collection("bookshop");
       const categoriesCollection = database.collection("productCategories");
       const usersCollection = database.collection("users");
       const productsCollection = database.collection("products");
+      const topprofileCollection = database.collection("topprofile");
       const bookingsCollection = database.collection("bookeditems");
       const postedProductsCollection = database.collection("sellersproducts");
       const  paymentsCollection = database.collection("payments");
@@ -66,12 +68,24 @@ async function run() {
       const result = await categoriesCollection.find(query).toArray();
       res.send(result);
     });
+    app.get("/vodeos", async (req, res) => {
+      const query = {};
+      const result = await vodeosCollection.find(query).toArray();
+      res.send(result);
+    });
     // GET API for kazi
     app.get("/kazi", async (req, res) => {
       const query = {};
       const cursor = kaziCollection.find(query);
       const result = await cursor.toArray();
       // const count = await kaziCollection.estimatedDocumentCount();
+      res.send(result);
+    });
+    // GET API for Top Profile
+    app.get("/topprofile", async (req, res) => {
+      const query = {};
+      const cursor = topprofileCollection.find(query);
+      const result = await cursor.toArray();
       res.send(result);
     });
 
@@ -118,6 +132,8 @@ async function run() {
      
       res.send(result);
     });
+
+  
 
     // GET API to show the item id based
     app.get('/item/:id', async(req,res)=>{
@@ -248,6 +264,12 @@ async function run() {
     app.post("/kazi", async (req, res) => {
       const postedkazi = req.body;
       const result = await kaziCollection.insertOne(postedkazi);
+      res.send(result);
+    });
+    // POST API for Top Profile 
+    app.post("/topprofile", async (req, res) => {
+      const postedtopprofile = req.body;
+      const result = await topprofileCollection.insertOne(postedtopprofile);
       res.send(result);
     });
 
