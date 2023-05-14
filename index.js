@@ -288,7 +288,7 @@ async function run() {
         total_amount: orderedProfile.age,
         currency: order.currency,
         tran_id:transactionId,
-        success_url: `http://localhost:5000/payment/success?transactionId=${transactionId}`,
+        success_url: `http://localhost:5000/payment/complete?transactionId=${transactionId}`,
               fail_url: `http://localhost:5000/payment/fail?transactionId=${transactionId}`,
               cancel_url: `http://localhost:5000/payment/cancel`,
         ipn_url: 'http://localhost:3030/ipn',
@@ -329,7 +329,7 @@ async function run() {
        
     });
 })
-app.post("/payment/success", async (req, res) => {
+app.post("/payment/complete", async (req, res) => {
   const { transactionId } = req.query;
 
   const result = await booktopprofileCollection.updateOne(
@@ -338,20 +338,19 @@ app.post("/payment/success", async (req, res) => {
   );
 
   if(result.modifiedCount > 0){
-      res.redirect('http://localhost:3000');
+        res.redirect(`http://localhost:3000/payment/complete?transactionId=${transactionId}`);
   }
 });
 
-app.get("/orders/by-transaction-id/:id", async (req, res) => {
+app.get("/booking/by-transaction-id/:id", async (req, res) => {
   const { id } = req.params;
   const order = await booktopprofileCollection.findOne({ transactionId: id });
   console.log(id, order);
   res.send(order);
 });
+   
+
     app.post("/bookshop", async (req, res) => {
-      // const postedkazi = req.body;
-      // const result = await bookshopCollection.insertOne(postedkazi);
-      // res.send(result);
       const order = req.body;
       const orderedService = await itemCollection.findOne({_id:ObjectId(order.service)});
       console.log(orderedService);
@@ -420,128 +419,6 @@ app.get("/orders/by-transaction-id/:id", async (req, res) => {
   console.log(id, order);
   res.send(order);
 });
-
-//     app.post("/bookshop", async (req, res) => {
-//       // const postedkazi = req.body;
-//       // const result = await bookshopCollection.insertOne(postedkazi);
-//       // res.send(result);
-//       const order = req.body;
-//       const orderedService = await itemCollection.findOne({_id:ObjectId(order.service)});
-//       console.log(orderedService);
-//       const transactionId = new ObjectId().toString();
-//       const data = {
-//         total_amount: orderedService.price,
-//         currency: order.currency,
-//         tran_id:transactionId,
-//         success_url: `http://localhost:5000/payment/success?transactionId=${transactionId}`,
-//               fail_url: `http://localhost:5000/payment/fail?transactionId=${transactionId}`,
-//               cancel_url: `http://localhost:5000/payment/cancel`,
-//         ipn_url: 'http://localhost:3030/ipn',
-//         shipping_method: 'Courier',
-//         product_name: 'Computer.',
-//         product_category: 'Electronic',
-//         product_profile: 'general',
-//         cus_name: order.customer,
-//         cus_email: order.email,
-//         cus_add1: order.address,
-//         cus_add2: 'Dhaka',
-//         cus_city: 'Dhaka',
-//         cus_state: 'Dhaka',
-//         cus_postcode: '1000',
-//         cus_country: 'Bangladesh',
-//         cus_phone: '01711111111',
-//         cus_fax: '01711111111',
-//         ship_name: 'Customer Name',
-//         ship_add1: 'Dhaka',
-//         ship_add2: 'Dhaka',
-//         ship_city: 'Dhaka',
-//         ship_state: 'Dhaka',
-//         ship_postcode: 1000,
-//         ship_country: 'Bangladesh',
-//     };
-//     const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
-//     sslcz.init(data).then(apiResponse => {
-//         // Redirect the user to payment gateway
-//         let GatewayPageURL = apiResponse.GatewayPageURL
-//         console.log(apiResponse)
-//         bookshopCollection.insertOne({
-//           ...order,
-//           price:orderedService.price,
-//           transactionId,
-//           paid:false,
-//         });
-//         res.send({url: GatewayPageURL});
-       
-//     });
-// })
-// //     app.post("/booktopprofile", async (req, res) => {
-// //       const order = req.body;
-// //       const orderedProfile = await topprofileCollection.findOne({_id:ObjectId(order.service)});
-// //       const transactionId = new ObjectId().toString();
-// //       const data = {
-// //         total_amount: orderedProfile.age,
-// //         currency: order.currency,
-// //         tran_id:transactionId,
-// //         success_url: `http://localhost:5000/payment/success?transactionId=${transactionId}`,
-// //               fail_url: `http://localhost:5000/payment/fail?transactionId=${transactionId}`,
-// //               cancel_url: `http://localhost:5000/payment/cancel`,
-// //         ipn_url: 'http://localhost:3030/ipn',
-// //         shipping_method: 'Courier',
-// //         product_name: 'Computer.',
-// //         product_category: 'Electronic',
-// //         product_profile: 'general',
-// //         cus_name: order.customer,
-// //         cus_email: order.email,
-// //         cus_add1: order.address,
-// //         cus_add2: 'Dhaka',
-// //         cus_city: 'Dhaka',
-// //         cus_state: 'Dhaka',
-// //         cus_postcode: '1000',
-// //         cus_country: 'Bangladesh',
-// //         cus_phone: '01711111111',
-// //         cus_fax: '01711111111',
-// //         ship_name: 'Customer Name',
-// //         ship_add1: 'Dhaka',
-// //         ship_add2: 'Dhaka',
-// //         ship_city: 'Dhaka',
-// //         ship_state: 'Dhaka',
-// //         ship_postcode: 1000,
-// //         ship_country: 'Bangladesh',
-// //     };
-// //     const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
-// //     sslcz.init(data).then(apiResponse => {
-// //         // Redirect the user to payment gateway
-// //         let GatewayPageURL = apiResponse.GatewayPageURL
-// //         console.log(apiResponse)
-// //         topprofileCollection.insertOne({
-// //           ...order,
-// //           price:orderedProfile.age,
-// //           transactionId,
-// //           paid:false,
-// //         });
-// //         res.send({url: GatewayPageURL});
-       
-// //     });
-// // })
-// app.post("/payment/success", async (req, res) => {
-//   const { transactionId } = req.query;
-
-//   const result = await booktopprofileCollection.updateOne(
-//     { transactionId },
-//     { $set: { paid: true, paidAt: new Date() } }
-//   );
-
-//   if(result.modifiedCount > 0){
-//       res.redirect(`http://localhost:3000/payment/success?transactionId=${transactionId}`);
-//   }
-// });
-
-// app.get("/orders/by-transaction-id/:id", async (req, res) => {
-//   const { id } = req.params;
-//   const order = await topprofileCollection.findOne({ transactionId: id });
-//   console.log(id, order);
-//   res.send(order);
-// });
 
     app.post("/choice", async (req, res) => {
       const choicelist = req.body;
