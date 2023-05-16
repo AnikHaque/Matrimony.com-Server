@@ -52,7 +52,9 @@ async function run() {
       const vodeosCollection = database.collection("vodeos");
       const choicelistCollection = database.collection("choice");
       const bookshopCollection = database.collection("bookshop");
+      const membershipCollection = database.collection("membership");
       const booktopprofileCollection = database.collection("booktopprofile");
+      const bookKaziCollection = database.collection("bookKaziprofile");
       const categoriesCollection = database.collection("productCategories");
       const usersCollection = database.collection("users");
       const productsCollection = database.collection("products");
@@ -89,6 +91,17 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+    app.get("/membership", async (req, res) => {
+      let query = {};
+  const email = req.query.email;
+if(email){
+  query = {email: email};
+}
+    const cursor = membershipCollection.find(query);
+    const room = await cursor.toArray();
+    res.send(room);
+})
+ 
 
      // GET API for profiles
     app.get("/products", async (req, res) => {
@@ -133,8 +146,6 @@ async function run() {
      
       res.send(result);
     });
-
-  
 
     // GET API to show the item id based
     app.get('/item/:id', async(req,res)=>{
@@ -274,6 +285,12 @@ async function run() {
       const result = await kaziCollection.insertOne(postedkazi);
       res.send(result);
     });
+    // POST API for membership
+    app.post("/membership", async (req, res) => {
+      const postedmember = req.body;
+      const result = await membershipCollection.insertOne(postedmember);
+      res.send(result);
+    });
     // POST API for Top Profile 
     app.post("/topprofile", async (req, res) => {
       const postedtopprofile = req.body;
@@ -349,6 +366,78 @@ app.get("/booking/by-transaction-id/:id", async (req, res) => {
   res.send(order);
 });
    
+
+
+    app.post("/bookKaziprofile", async (req, res) => {
+      const order = req.body;
+      const orderedKazi = await kaziCollection.findOne({_id:ObjectId(order.service)});
+      const transactionId = new ObjectId().toString();
+      const data = {
+        total_amount: orderedKazi.price,
+        currency: order.currency,
+        tran_id:transactionId,
+        success_url: `http://localhost:5000/payment/done?transactionId=${transactionId}`,
+              fail_url: `http://localhost:5000/payment/fail?transactionId=${transactionId}`,
+              cancel_url: `http://localhost:5000/payment/cancel`,
+        ipn_url: 'http://localhost:3030/ipn',
+        shipping_method: 'Courier',
+        product_name: 'Computer.',
+        product_category: 'Electronic',
+        product_profile: 'general',
+        cus_name: order.customer,
+        cus_email: order.email,
+        cus_add1: order.address,
+        cus_add2: 'Dhaka',
+        cus_city: 'Dhaka',
+        cus_state: 'Dhaka',
+        cus_postcode: '1000',
+        cus_country: 'Bangladesh',
+        cus_phone: '01711111111',
+        cus_fax: '01711111111',
+        ship_name: 'Customer Name',
+        ship_add1: 'Dhaka',
+        ship_add2: 'Dhaka',
+        ship_city: 'Dhaka',
+        ship_state: 'Dhaka',
+        ship_postcode: 1000,
+        ship_country: 'Bangladesh',
+    };
+    const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
+    sslcz.init(data).then(apiResponse => {
+        // Redirect the user to payment gateway
+        let GatewayPageURL = apiResponse.GatewayPageURL
+        console.log(apiResponse)
+        bookKaziCollection.insertOne({
+          ...order,
+          price:orderedKazi.price,
+          transactionId,
+          paid:false,
+        });
+        res.send({url: GatewayPageURL});
+       
+    });
+})
+
+app.post("/payment/done", async (req, res) => {
+  const { transactionId } = req.query;
+
+  const result = await bookKaziCollection.updateOne(
+    { transactionId },
+    { $set: { paid: true, paidAt: new Date() } }
+  );
+
+  if(result.modifiedCount > 0){
+        res.redirect(`http://localhost:3000/payment/done?transactionId=${transactionId}`);
+  }
+});
+
+app.get("/bookingKazi/by-transaction-id/:id", async (req, res) => {
+  const { id } = req.params;
+  const order = await bookKaziCollection.findOne({ transactionId: id });
+  console.log(id, order);
+  res.send(order);
+});
+
 
     app.post("/bookshop", async (req, res) => {
       const order = req.body;
