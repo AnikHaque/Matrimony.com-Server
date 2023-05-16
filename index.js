@@ -305,9 +305,9 @@ if(email){
         total_amount: orderedProfile.age,
         currency: order.currency,
         tran_id:transactionId,
-        success_url: `http://localhost:5000/payment/complete?transactionId=${transactionId}`,
-              fail_url: `http://localhost:5000/payment/fail?transactionId=${transactionId}`,
-              cancel_url: `http://localhost:5000/payment/cancel`,
+        success_url: `https://matrimony-com-server-anikhaque.vercel.app/payment/complete?transactionId=${transactionId}`,
+              fail_url: `https://matrimony-com-server-anikhaque.vercel.app/payment/fail?transactionId=${transactionId}`,
+              cancel_url: `https://matrimony-com-server-anikhaque.vercel.app/payment/cancel`,
         ipn_url: 'http://localhost:3030/ipn',
         shipping_method: 'Courier',
         product_name: 'Computer.',
@@ -355,7 +355,7 @@ app.post("/payment/complete", async (req, res) => {
   );
 
   if(result.modifiedCount > 0){
-        res.redirect(`http://localhost:3000/payment/complete?transactionId=${transactionId}`);
+        res.redirect(`https://marriage-website-a05d0.web.app/payment/complete?transactionId=${transactionId}`);
   }
 });
 
@@ -376,9 +376,9 @@ app.get("/booking/by-transaction-id/:id", async (req, res) => {
         total_amount: orderedKazi.price,
         currency: order.currency,
         tran_id:transactionId,
-        success_url: `http://localhost:5000/payment/done?transactionId=${transactionId}`,
-              fail_url: `http://localhost:5000/payment/fail?transactionId=${transactionId}`,
-              cancel_url: `http://localhost:5000/payment/cancel`,
+        success_url: `https://matrimony-com-server-anikhaque.vercel.app/payment/done?transactionId=${transactionId}`,
+              fail_url: `https://matrimony-com-server-anikhaque.vercel.app/payment/fail?transactionId=${transactionId}`,
+              cancel_url: `https://matrimony-com-server-anikhaque.vercel.app/payment/cancel`,
         ipn_url: 'http://localhost:3030/ipn',
         shipping_method: 'Courier',
         product_name: 'Computer.',
@@ -427,7 +427,7 @@ app.post("/payment/done", async (req, res) => {
   );
 
   if(result.modifiedCount > 0){
-        res.redirect(`http://localhost:3000/payment/done?transactionId=${transactionId}`);
+        res.redirect(`https://marriage-website-a05d0.web.app/payment/done?transactionId=${transactionId}`);
   }
 });
 
@@ -448,9 +448,9 @@ app.get("/bookingKazi/by-transaction-id/:id", async (req, res) => {
         total_amount: orderedService.price,
         currency: order.currency,
         tran_id:transactionId,
-        success_url: `http://localhost:5000/payment/success?transactionId=${transactionId}`,
-              fail_url: `http://localhost:5000/payment/fail?transactionId=${transactionId}`,
-              cancel_url: `http://localhost:5000/payment/cancel`,
+        success_url: `https://matrimony-com-server-anikhaque.vercel.app/payment/success?transactionId=${transactionId}`,
+              fail_url: `https://matrimony-com-server-anikhaque.vercel.app/payment/fail?transactionId=${transactionId}`,
+              cancel_url: `https://matrimony-com-server-anikhaque.vercel.app/payment/cancel`,
         ipn_url: 'http://localhost:3030/ipn',
         shipping_method: 'Courier',
         product_name: 'Computer.',
@@ -498,7 +498,7 @@ app.post("/payment/success", async (req, res) => {
   );
 
   if(result.modifiedCount > 0){
-      res.redirect(`http://localhost:3000/payment/success?transactionId=${transactionId}`);
+      res.redirect(`https://marriage-website-a05d0.web.app/payment/success?transactionId=${transactionId}`);
   }
 });
 
